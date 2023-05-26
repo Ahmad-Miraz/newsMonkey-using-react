@@ -6,15 +6,41 @@ export class News extends Component {
     super();
     this.state={
       articles:[],
-      loading:false
+      loading:false,
+      page:1
     }
 
   }
   async componentDidMount(){
-    let url="https://newsapi.org/v2/everything?q=bitcoin&apiKey=e0cc8d57ab9e43828ae4fe3531fdaf5f";
+    let url="https://newsapi.org/v2/everything?q=bitcoin&apiKey=e0cc8d57ab9e43828ae4fe3531fdaf5f&page=1pagesize=20";
     let data= await fetch(url);
     let parseData=await data.json();
     this.setState({articles:parseData.articles})
+  }
+  handlePrevButton=async()=>{
+    let url=`https://newsapi.org/v2/everything?q=bitcoin&apiKey=e0cc8d57ab9e43828ae4fe3531fdaf5f&page=${this.state.page-1}&pagesize=20`;
+    let data= await fetch(url);
+    let parseData=await data.json();
+    this.setState({
+      articles:parseData.articles,
+      page:this.state.page-1
+    })
+  }
+
+  handleNextButton = async()=>{
+    if(this.state.page+1>Math.ceil(this.state.totalResults/20)){
+      
+
+    }
+    else{
+      let url=`https://newsapi.org/v2/everything?q=bitcoin&apiKey=e0cc8d57ab9e43828ae4fe3531fdaf5f&page=${this.state.page+1}&pagesize=20`;
+      let data= await fetch(url);
+      let parseData=await data.json();
+      this.setState({
+        articles:parseData.articles,
+        page:this.state.page+1
+      });
+    }
   }
   render() {
     return (
@@ -27,6 +53,11 @@ export class News extends Component {
                   </div>
           })}
           
+        </div>
+        <div class="d-flex justify-content-between mb-4">
+        <button type="button" class="btn btn-dark" disabled={this.state.page<=1} onClick={this.handlePrevButton}>&laquo; Previous</button>
+        <button type="button" class="btn btn-dark" disabled={this.state.page+1>Math.ceil(this.state.totalResults/25)} onClick={this.handleNextButton}>Next &raquo;</button>
+
         </div>
       </div>
     );
