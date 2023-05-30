@@ -7,8 +7,8 @@ import NavBar from './components/NavBar';
 import News from './components/News';
 
 export default class App extends Component {
-  pageSize=15
-  country='in'
+  pageSize=10
+  country='us'
   render() {
     return (
       <>
